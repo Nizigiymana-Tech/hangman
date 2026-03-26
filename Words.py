@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, choice
 
 Words = [
     "Apple",
@@ -10,4 +10,4 @@ Words = [
 ]
 
 def RNGWord():
-    return Words[randint(0, (len(Words) - 1))]
+    return choice(Words)

@@ -1,6 +1,6 @@
 import Words
 
-KnownWords = []
+KnownWords = {}
 
 def HideWord(Word):
     HideWord = []
@@ -11,25 +11,32 @@ def HideWord(Word):
         else:
             HideWord.append("_")
 
-    return ' '.join(HideWord)
+    return ''.join(HideWord)
 
 def CheckLetter(Letter, Word):
     NewWord = []
     Correct = False
 
+    for value in KnownWords.values():
+        if value == Letter:
+            return False, 0
+    
+    KnownWords[str(len(KnownWords))] = Letter
+
     for index in Word:
+        print(index)
         if index == " ":
             NewWord.append(" ")
-        elif index == Letter and not KnownWords[Letter]:
+        elif index == Letter:
             NewWord.append(Letter)
-            KnownWords.append(Letter)
             Correct = True
-        elif KnownWords[Letter]:
-            continue
         else:
-            NewWord.append("_")
+            if index not in KnownWords.values():
+                NewWord.append("_")
+            else:
+                NewWord.append(index)
 
-    return Correct, ' '.join(NewWord)
+    return Correct, ''.join(NewWord)
 
 def Start():
     print("Hangman time")
@@ -39,6 +46,7 @@ def Start():
     print(f"The word is {HiddenWord}")
 
     Lives = 5
+    Won = False
     
     while Lives > 0:
         Letter = input("Input a letter: ")
@@ -50,9 +58,19 @@ def Start():
             print(f"Lives left: {str(Lives)}")
         else:
             print("Nice Job!")
+        
+        if NewWord: 
+            HiddenWord = NewWord
 
-        HiddenWord = NewWord
-        print(NewWord)
+        if HiddenWord == RandomWord:
+            Won = True
+            break
 
+        print(HiddenWord)
+
+    if Won:
+        print("Amazing JOb!!!!! You WON!!!!!!!!!!")
+    else:
+        print("You Stuck!!!")
 
 Start()
